@@ -1,0 +1,9 @@
+config.yml
+*.yml
+*.yaml
+*.env
+.env
+Makefile
+dockerfile
+**/migrations
+
