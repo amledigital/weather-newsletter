@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type NDFDHourly struct {
 	NDFDHourly struct {
 		Data []WeatherData `json:"data"`
@@ -44,6 +46,6 @@ type WeatherData struct {
 		Value string `json:"value"`
 		Text  string `json:"text"`
 	} `json:"weather_code"`
-	Daylight   bool   `json:"daylight"`
-	ValidBegin string `json:"valid_begin"`
+	Daylight   bool      `json:"daylight"`
+	ValidBegin time.Time `json:"valid_begin"`
 }

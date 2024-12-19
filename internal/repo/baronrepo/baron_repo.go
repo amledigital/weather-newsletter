@@ -127,7 +127,17 @@ func (br *BaronRepo) FetchGeo(zipcode string) (*models.GeoCode, error) {
 
 func (br *BaronRepo) FetchHourlyPointForecast(lat, lon float32, hours int) (*models.NDFDHourly, error) {
 
-	fmtURL := fmt.Sprintf("%s/%s/reports/ndfd/hourly.json?lat=%.2f&lon=%.2f&hours=%d", br.cfg.ApiURL, br.cfg.AccessKey, lon, lat, hours)
+	dateOnly := time.Now().Format(time.DateOnly)
+	timeOnly := time.Now().Format(time.TimeOnly)
+
+	fmtURL := fmt.Sprintf("%s/%s/reports/ndfd/hourly.json?lat=%.2f&lon=%.2f&hours=%d&utc=%s",
+		br.cfg.ApiURL,
+		br.cfg.AccessKey,
+		lon,
+		lat,
+		hours,
+		dateOnly+"T"+timeOnly,
+	)
 
 	fmt.Println(fmtURL)
 

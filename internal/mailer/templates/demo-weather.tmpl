@@ -1,0 +1,234 @@
+{{define "subject"}}TEST Daily Weather For {{.City}} - {{ (index .HourlyData.NDFDHourly.Data 0).ValidBegin.Format "Monday, January 02, 2006 3:04 PM" }}{{end}}
+
+{{define "plainBody"}}
+Good Morning {{.EmailAddress}},
+Here is the hourly forecast for {{.Zipcode}} - {{.City}}
+{{ with .HourlyData }}
+HOURLY FORECAST BREAKDOWN:
+{{ range .NDFDHourly.Data }}
+Time: {{.ValidBegin.Format "15:04"}}
+PRECIPITATION
+
+Probability: {{.Precipitation.Probability.Value}}{{.Precipitation.Probability.Units}}
+Potential: {{.Precipitation.Potential.Value}}{{.Precipitation.Potential.Units}}
+
+TEMPERATURE
+
+Current: {{.Temperature.Value | convertToF}}F
+Wind Chill: {{.Temperature.WindChill}}{{.Temperature.Units}}
+Dew Point: {{.Temperature.DewPoint}}{{.Temperature.Units}}
+Feels Like: {{.Temperature.Apparent}}{{.Temperature.Units}}
+
+CLOUD COVER
+
+Coverage: {{.CloudCover.Value}}{{.CloudCover.Units}}
+Conditions: {{.CloudCover.Text}}
+
+HUMIDITY
+
+Relative Humidity: {{.RelativeHumidity.Value}}{{.RelativeHumidity.Units}}
+
+WIND
+
+Speed: {{.Wind.Speed}}{{.Wind.SpeedUnits}}
+Gust: {{.Wind.Gust}}{{.Wind.SpeedUnits}}
+Direction: {{.Wind.Dir}}{{.Wind.DirUnits}}
+
+WEATHER
+
+Conditions: {{.WeatherCode.Text}}
+
+DAYLIGHT
+
+Status: {{if .Daylight}}Yes{{else}}No{{end}}
+
+{{ end }}
+{{ end }}
+Have a great day!
+{{end}}
+{{define "htmlBody"}}
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        .weather-table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            margin: 20px 0; 
+            overflow-x: auto;
+        }
+        .weather-table td, .weather-table th { 
+            border: 1px solid #ddd; 
+            padding: 8px; 
+            min-width: 65px;
+        }
+        .weather-table th { 
+            background-color: #0055B8;
+            color: #fff;
+        }
+        .section-header { 
+            background-color: #D1D3D4;
+            color: #000;
+            font-weight: bold; 
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333333; padding: 20px;">
+    <p>Good Morning {{.EmailAddress}},</p>
+
+    <p>This is a demo of what we can do with the Baron Weather API</p>
+
+    <p>You should receive three different emails with three different zip codes</p>
+
+    <p><b>Note:</b> Baron does not reveal passed hours data.  Also, I haven't converted anything (except Current Temp) since this is a demo email showing what we could do.</p>
+
+    <h2>Here is the hourly forecast for <b>{{.Zipcode}}</b> - <b>{{.City}}</b></h2>
+    
+    {{ with .HourlyData }}
+    <div class="table-wrapper">
+        <table class="weather-table">
+            <tr>
+                <th>Metric</th>
+                {{ range .NDFDHourly.Data }}
+                <th style="background-color: #0055B8; color: white; text-align: center;">
+                    {{.ValidBegin.Format "15:04"}}
+                </th>
+                {{ end }}
+            </tr>
+            
+            <!-- Precipitation Section -->
+            <tr class="section-header">
+                <td colspan="{{len .NDFDHourly.Data | add 1}}">Precipitation</td>
+            </tr>
+            <tr>
+                <td>Probability</td>
+                {{ range .NDFDHourly.Data }}
+                <td>{{.Precipitation.Probability.Value}}{{.Precipitation.Probability.Units}}</td>
+                {{ end }}
+            </tr>
+            <tr>
+                <td>Potential</td>
+                {{ range .NDFDHourly.Data }}
+                <td>{{.Precipitation.Potential.Value}}{{.Precipitation.Potential.Units}}</td>
+                {{ end }}
+            </tr>
+
+            <!-- Temperature Section -->
+            <tr class="section-header">
+                <td colspan="{{len .NDFDHourly.Data | add 1}}">Temperature</td>
+            </tr>
+            <tr>
+                <td>Current</td>
+                {{ range .NDFDHourly.Data }}
+                <td>{{.Temperature.Value | convertToF}}F</td>
+                {{ end }}
+            </tr>
+            <tr>
+                <td>Wind Chill</td>
+                {{ range .NDFDHourly.Data }}
+                <td>{{.Temperature.WindChill}}{{.Temperature.Units}}</td>
+                {{ end }}
+            </tr>
+            <tr>
+                <td>Dew Point</td>
+                {{ range .NDFDHourly.Data }}
+                <td>{{.Temperature.DewPoint}}{{.Temperature.Units}}</td>
+                {{ end }}
+            </tr>
+            <tr>
+                <td>Feels Like</td>
+                {{ range .NDFDHourly.Data }}
+                <td>{{.Temperature.Apparent}}{{.Temperature.Units}}</td>
+                {{ end }}
+            </tr>
+
+            <!-- Cloud Cover Section -->
+            <tr class="section-header">
+                <td colspan="{{len .NDFDHourly.Data | add 1}}">Cloud Cover</td>
+            </tr>
+            <tr>
+                <td>Coverage</td>
+                {{ range .NDFDHourly.Data }}
+                <td>{{.CloudCover.Value}}{{.CloudCover.Units}}</td>
+                {{ end }}
+            </tr>
+            <tr>
+                <td>Conditions</td>
+                {{ range .NDFDHourly.Data }}
+                <td>{{.CloudCover.Text}}</td>
+                {{ end }}
+            </tr>
+
+            <!-- Humidity Section -->
+            <tr class="section-header">
+                <td colspan="{{len .NDFDHourly.Data | add 1}}">Humidity</td>
+            </tr>
+            <tr>
+                <td>Relative Humidity</td>
+                {{ range .NDFDHourly.Data }}
+                <td>{{.RelativeHumidity.Value}}{{.RelativeHumidity.Units}}</td>
+                {{ end }}
+            </tr>
+
+            <!-- Wind Section -->
+            <tr class="section-header">
+                <td colspan="{{len .NDFDHourly.Data | add 1}}">Wind</td>
+            </tr>
+            <tr>
+                <td>Speed</td>
+                {{ range .NDFDHourly.Data }}
+                <td>{{.Wind.Speed}}{{.Wind.SpeedUnits}}</td>
+                {{ end }}
+            </tr>
+            <tr>
+                <td>Gust</td>
+                {{ range .NDFDHourly.Data }}
+                <td>{{.Wind.Gust}}{{.Wind.SpeedUnits}}</td>
+                {{ end }}
+            </tr>
+            <tr>
+                <td>Direction</td>
+                {{ range .NDFDHourly.Data }}
+                <td>{{.Wind.Dir}}{{.Wind.DirUnits}}</td>
+                {{ end }}
+            </tr>
+
+            <!-- Weather Section -->
+            <tr class="section-header">
+                <td colspan="{{len .NDFDHourly.Data | add 1}}">Weather</td>
+            </tr>
+            <tr>
+                <td>Code</td>
+                {{ range .NDFDHourly.Data }}
+                <td>{{.WeatherCode.Value}}</td>
+                {{ end }}
+            </tr>
+            <tr>
+                <td>Conditions</td>
+                {{ range .NDFDHourly.Data }}
+                <td>{{.WeatherCode.Text}}</td>
+                {{ end }}
+            </tr>
+
+            <!-- Daylight Section -->
+            <tr class="section-header">
+                <td colspan="{{len .NDFDHourly.Data | add 1}}">Daylight</td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                {{ range .NDFDHourly.Data }}
+                <td>{{if .Daylight}}Yes{{else}}No{{end}}</td>
+                {{ end }}
+            </tr>
+        </table>
+    </div>
+    {{ end }}
+</body>
+</html>
+{{end}}
