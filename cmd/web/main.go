@@ -72,6 +72,7 @@ func main() {
 		Email:   "andrew@ledigital.com",
 		Zipcode: "49601",
 	})
+	dummyUsers = []DummyUser{}
 	dummyUsers = append(dummyUsers, DummyUser{
 		Email:   "andrew@ledigital.com",
 		Zipcode: "32080",
@@ -103,7 +104,7 @@ func main() {
 			log.Fatalln(err)
 		}
 
-		hourlyData, err := bh.client.FetchHourlyPointForecast(zipData.GeoCode.Data[0].Coordinates[0], zipData.GeoCode.Data[0].Coordinates[1], 16)
+		hourlyData, err := bh.client.FetchHourlyPointForecast(zipData.GeoCode.Data[0].Coordinates[0], zipData.GeoCode.Data[0].Coordinates[1], 36)
 
 		if err != nil {
 			log.Fatalln(err)

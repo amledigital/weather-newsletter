@@ -161,6 +161,17 @@ func (br *BaronRepo) FetchHourlyPointForecast(lat, lon float32, hours int) (*mod
 		if err != nil {
 			return nil, err
 		}
+
+		var filteredData = []models.WeatherData{}
+
+		for i, v := range ndfdData.NDFDHourly.Data {
+			if i%3 == 0 {
+				filteredData = append(filteredData, v)
+			}
+		}
+
+		ndfdData.NDFDHourly.Data = filteredData
+
 		return &ndfdData, nil
 	}
 

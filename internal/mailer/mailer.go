@@ -31,6 +31,9 @@ var tmplFuncs = template.FuncMap{
 		result := (temp * 9 / 5) + 32
 		return int(result)
 	},
+	"mod": func(i, j int) bool {
+		return i%j == 0
+	},
 }
 
 // Define a Mailer struct which contains a mail.Dialer instance (used to connect to a
